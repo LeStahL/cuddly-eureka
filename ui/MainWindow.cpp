@@ -31,3 +31,15 @@ MainWindow::~MainWindow()
 {
     delete m_ui;
 }
+
+void MainWindow::newDemo()
+{
+}
+
+void MainWindow::saveDemo()
+{
+}
+
+void MainWindow::openDemo()
+{
+}

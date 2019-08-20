@@ -33,6 +33,11 @@ public:
     MainWindow(QApplication *app);
     virtual ~MainWindow();
     
+private slots:
+    void openDemo();
+    void newDemo();
+    void saveDemo();
+    
 private:
     Ui::MainWindow *m_ui;
 };
