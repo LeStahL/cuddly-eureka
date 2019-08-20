@@ -31,6 +31,12 @@ public:
     Demo(QVariant serial);
     QVariant serialize();
     
+    bool addScene(QString name = "");
+    bool removeScene(QString name);
+    bool renameScene(QString name);
+    Scene *sceneAt(int index);
+    Scene *sceneWithName(QString name);
+    
 private:
     QString m_demo_name;
     QList<Scene *> m_scenes;

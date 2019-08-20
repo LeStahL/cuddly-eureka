@@ -37,3 +37,8 @@ Scene::Scene(QVariant serial)
     
     m_name = data.at(0).toString();
 }
+
+QString Scene::name()
+{
+    return m_name;
+}

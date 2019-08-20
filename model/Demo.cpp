@@ -41,9 +41,47 @@ QVariant Demo::serialize()
     
     data.push_back(QVariant(m_demo_name));
     for(int i=0; i<m_scenes.size(); ++i)
-    {
         data.push_back(m_scenes.at(i)->serialize());
-    }
     
     return QVariant(data);
+}
+
+Scene * Demo::sceneAt(int index)
+{
+    if(index < 0 || index >= m_scenes.size()) return 0;
+    return m_scenes.at(index);
+}
+
+Scene * Demo::sceneWithName(QString name)
+{
+    for(int i=0; i<m_scenes.size(); ++i)
+    {
+        if(m_scenes.at(i)->name() == name)
+            return m_scenes.at(i);
+    }
+    return 0;
+}
+
+bool Demo::addScene(QString name)
+{
+    for(int i=0; i<m_scenes.size(); ++i)
+    {
+        if(m_scenes.at(i)->name() == name)
+            return false;
+    }
+    
+    if(name == "")
+        m_scenes.push_back(new Scene(QString("Scene ")+QString::number(m_scenes.size())+QString(" (Unnamed)")));
+    else 
+        m_scenes.push_back(new Scene(name));
+    
+    return true;
+}
+
+bool Demo::removeScene(QString name)
+{
+    Scene *scene = sceneWithName(name);
+    if(scene == 0) return false;
+    delete scene;
+    return true;
 }

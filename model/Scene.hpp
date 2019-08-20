@@ -28,6 +28,7 @@ public:
     Scene(QString name = "");
     Scene(QVariant serial);
     QVariant serialize();
+    QString name();
     
 private:
     QString m_name;
