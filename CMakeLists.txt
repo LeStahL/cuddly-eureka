@@ -32,8 +32,12 @@ find_package(Qt5Gui CONFIG REQUIRED)
 
 set(CUDDLY_SOURCES
     CuddlyEureka.cpp
+    
     ui/MainWindow.cpp
     ui/MainWindow.ui
+    
+    model/Demo.cpp
+    model/Scene.cpp
 )
 
 add_executable(cuddly-eureka ${CUDDLY_SOURCES})

@@ -83,7 +83,15 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuDemo">
+    <property name="title">
+     <string>Demo</string>
+    </property>
+    <addaction name="actionAdd_Scene"/>
+    <addaction name="actionRemove_Scene"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuDemo"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="dockWidget">
@@ -124,6 +132,11 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew_Demo"/>
+   <addaction name="actionOpen_Demo"/>
+   <addaction name="actionSave_Demo"/>
+   <addaction name="separator"/>
+   <addaction name="actionAdd_Scene"/>
+   <addaction name="actionRemove_Scene"/>
   </widget>
   <action name="actionNew_Demo">
    <property name="icon">
@@ -167,6 +180,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAdd_Scene">
+   <property name="text">
+    <string>Add Scene</string>
+   </property>
+  </action>
+  <action name="actionRemove_Scene">
+   <property name="text">
+    <string>Remove Scene</string>
    </property>
   </action>
  </widget>
