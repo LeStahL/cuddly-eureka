@@ -31,10 +31,10 @@ MainWindow::MainWindow(QApplication *app)
     m_ui->setupUi(this);
     
     m_demo = new Demo();
-    m_demo_model = new DemoModel(m_demo);
+    m_demo_model = new DemoModel(m_demo, &m_undo_stack);
 
     m_ui->tableView->setModel(m_demo_model);
-    m_ui->tableView->setStyleSheet("QHeaderView::section { background-color:#3d253b; text-color:#f3bf8f; }");
+    m_ui->tableView->setStyleSheet("QHeaderView::section { background-color:#3d253b; color:#f3bf8f; }");
     m_ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     
     m_ui->tableView->update();

@@ -22,9 +22,10 @@
 #include <QColor>
 #include <QPushButton>
 
-DemoModel::DemoModel(Demo* demo, QObject* parent)
+DemoModel::DemoModel(Demo* demo, QUndoStack *undo_stack, QObject* parent)
     : QAbstractTableModel(parent)
     , m_demo(demo)
+    , m_undo_stack(undo_stack)
 {
 }
 
@@ -163,4 +164,19 @@ void DemoModel::update(int row, int column)
 void DemoModel::updateAll()
 {
     emit dataChanged(index(0,0), index(rowCount(), columnCount()));
+}
+
+Qt::ItemFlags DemoModel::flags(const QModelIndex& index) const
+{
+    return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
+}
+
+bool DemoModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(role == Qt::EditRole)
+    {
+//         m_undo_stack.push(new TimeStartValueChanged(index, value, this));
+        return true;
+    }
+    return false;
 }
