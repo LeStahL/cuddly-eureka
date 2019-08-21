@@ -37,6 +37,7 @@ set(CUDDLY_SOURCES
     ui/MainWindow.ui
     
     model/Demo.cpp
+    model/DemoModel.cpp
     model/Scene.cpp
 )
 

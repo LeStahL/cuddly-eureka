@@ -36,6 +36,8 @@ public:
     bool renameScene(QString name);
     Scene *sceneAt(int index);
     Scene *sceneWithName(QString name);
+    int nScenes() const;
+    QString sceneName(int index) const;
     
 private:
     QString m_demo_name;

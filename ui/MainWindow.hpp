@@ -20,6 +20,9 @@
 
 #include <QMainWindow>
 
+#include "model/DemoModel.hpp"
+#include "model/Demo.hpp"
+
 namespace Ui
 {
     class MainWindow;
@@ -40,6 +43,8 @@ private slots:
     
 private:
     Ui::MainWindow *m_ui;
+    DemoModel *m_demo_model;
+    Demo *m_demo;
 };
 
 #endif

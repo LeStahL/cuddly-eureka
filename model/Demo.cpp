@@ -85,3 +85,13 @@ bool Demo::removeScene(QString name)
     delete scene;
     return true;
 }
+
+int Demo::nScenes() const
+{
+    return m_scenes.size();
+}
+
+QString Demo::sceneName(int index) const
+{
+    return m_scenes.at(index)->name();
+}

@@ -14,41 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include "MainWindow.hpp"
-#include "ui_MainWindow.h"
-
-#include <QDebug>
-
-MainWindow::MainWindow(QApplication *app)
-    : QMainWindow()
-    , m_ui(new Ui::MainWindow)
-    , m_demo(new Demo)
-{
-    m_ui->setupUi(this);
  
-    //FIXME: move that to the undo stack
-    for(int i=0; i<10; ++i)
-        m_demo->addScene(QString("Scene") + QString::number(i));
-    m_demo_model = new DemoModel(m_demo);
+ #ifndef DEMOMODEL_H
+ #define DEMOMODEL_H
+ 
+#include <QAbstractListModel>
+
+#include "Demo.hpp"
+
+ class DemoModel : public QAbstractListModel
+ {
+ public:
+     explicit DemoModel(Demo *demo, QObject *parent = 0);
+     ~DemoModel();
+     
+     // Show
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     
-    m_ui->tableView->setModel(m_demo_model);
-    m_ui->tableView->update();
-}
-
-MainWindow::~MainWindow()
-{
-    delete m_ui;
-}
-
-void MainWindow::newDemo()
-{
-}
-
-void MainWindow::saveDemo()
-{
-}
-
-void MainWindow::openDemo()
-{
-}
+ private:
+     Demo *m_demo;
+ };
+ 
+ #endif
