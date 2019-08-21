@@ -19,6 +19,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QUndoStack>
 
 #include "model/DemoModel.hpp"
 #include "model/Demo.hpp"
@@ -40,11 +41,16 @@ private slots:
     void openDemo();
     void newDemo();
     void saveDemo();
+    void undo();
+    void redo();
+    void addScene();
+    void removeScene();
     
 private:
     Ui::MainWindow *m_ui;
     DemoModel *m_demo_model;
     Demo *m_demo;
+    QUndoStack m_undo_stack;
 };
 
 #endif

@@ -14,54 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
- #include "Scene.hpp"
- 
-Scene::Scene(QString name)
-    : m_name(name)
-    , m_t_start(0)
-    , m_t_end(0)
-{
-}
 
-QVariant Scene::serialize()
+#include "AddSceneCommand.hpp"
+
+#include <QDebug>   
+
+AddSceneCommand::AddSceneCommand(DemoModel* model)
+    : m_model(model)
 {
-    QList<QVariant> data;
+    m_id = SCENE_COUNTER;
+    ++SCENE_COUNTER;
     
-    data.push_back(QVariant(m_name));
-    
-    return QVariant(data);
+    m_scene = new Scene(QString("Scene ")+QString::number(m_id));
 }
 
-Scene::Scene(QVariant serial)
+AddSceneCommand::~AddSceneCommand()
 {
-    QList<QVariant> data = serial.toList();
-    
-    m_name = data.at(0).toString();
+    delete m_scene;
 }
 
-QString Scene::name()
+void AddSceneCommand::redo()
 {
-    return m_name;
+    m_model->beginInsertRows(QModelIndex(), m_model->rowCount()-1, m_model->rowCount()-1);
+    m_model->demo()->addScene(m_scene);
+    m_model->endInsertRows();
+    m_model->updateAll();
 }
 
-void Scene::setTEnd(float tend)
+void AddSceneCommand::undo()
 {
-    m_t_end = tend;
+    m_model->beginRemoveRows(QModelIndex(),m_model->demo()->sceneIndex(m_scene), m_model->demo()->sceneIndex(m_scene));
+    m_model->demo()->removeScene(m_scene);
+    m_model->endRemoveRows();
+    m_model->updateAll();
 }
-
-float Scene::tEnd() const
-{
-    return m_t_end;
-}
-
-void Scene::setTStart(float tstart)
-{
-    m_t_start = tstart;
-}
-
-float Scene::tStart() const
-{
-    return m_t_start;
-}
-

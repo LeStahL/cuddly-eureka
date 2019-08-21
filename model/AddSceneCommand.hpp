@@ -14,54 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
- #include "Scene.hpp"
- 
-Scene::Scene(QString name)
-    : m_name(name)
-    , m_t_start(0)
-    , m_t_end(0)
-{
-}
 
-QVariant Scene::serialize()
+#ifndef ADDSCENECOMMAND_H
+#define ADDSCENECOMMAND_H
+
+#include <QUndoCommand>
+
+#include "DemoModel.hpp"
+#include "Scene.hpp"
+
+static int SCENE_COUNTER = 0;
+
+class AddSceneCommand : public QUndoCommand
 {
-    QList<QVariant> data;
+public:
+    AddSceneCommand(DemoModel *model);
+    virtual ~AddSceneCommand();
     
-    data.push_back(QVariant(m_name));
+    void redo() override;
+    void undo() override;
     
-    return QVariant(data);
-}
+private:
+    DemoModel *m_model;
+    Scene *m_scene;
+    int m_id;
+};
 
-Scene::Scene(QVariant serial)
-{
-    QList<QVariant> data = serial.toList();
-    
-    m_name = data.at(0).toString();
-}
-
-QString Scene::name()
-{
-    return m_name;
-}
-
-void Scene::setTEnd(float tend)
-{
-    m_t_end = tend;
-}
-
-float Scene::tEnd() const
-{
-    return m_t_end;
-}
-
-void Scene::setTStart(float tstart)
-{
-    m_t_start = tstart;
-}
-
-float Scene::tStart() const
-{
-    return m_t_start;
-}
-
+#endif

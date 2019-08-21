@@ -18,12 +18,17 @@
 #include "Demo.hpp"
 #include "Scene.hpp"
 
+#include <QDebug>
+
 Demo::Demo()
-    : m_demo_name("unnamed-demo")
+    : m_scenes(new QList<Scene *>)
+    , m_demo_name("unnamed-demo")
 {
 }
 
 Demo::Demo(QVariant serial)
+    : m_scenes(new QList<Scene *>)
+    , m_demo_name("unnamed-demo")
 {
     QList<QVariant> data = serial.toList();
     
@@ -31,49 +36,55 @@ Demo::Demo(QVariant serial)
     for(int i=0; i<data.size(); ++i)
     {
         QVariant scene_serial = data.at(i);
-        m_scenes.push_back(new Scene(scene_serial));
+        m_scenes->push_back(new Scene(scene_serial));
     }
 }
+
+Demo::~Demo()
+{
+    delete m_scenes;
+}
+
 
 QVariant Demo::serialize()
 {
     QList<QVariant> data;
     
     data.push_back(QVariant(m_demo_name));
-    for(int i=0; i<m_scenes.size(); ++i)
-        data.push_back(m_scenes.at(i)->serialize());
+    for(int i=0; i<m_scenes->size(); ++i)
+        data.push_back(m_scenes->at(i)->serialize());
     
     return QVariant(data);
 }
 
 Scene * Demo::sceneAt(int index)
 {
-    if(index < 0 || index >= m_scenes.size()) return 0;
-    return m_scenes.at(index);
+    if(index < 0 || index >= m_scenes->size()) return 0;
+    return m_scenes->at(index);
 }
 
 Scene * Demo::sceneWithName(QString name)
 {
-    for(int i=0; i<m_scenes.size(); ++i)
+    for(int i=0; i<m_scenes->size(); ++i)
     {
-        if(m_scenes.at(i)->name() == name)
-            return m_scenes.at(i);
+        if(m_scenes->at(i)->name() == name)
+            return m_scenes->at(i);
     }
     return 0;
 }
 
 bool Demo::addScene(QString name)
 {
-    for(int i=0; i<m_scenes.size(); ++i)
+    for(int i=0; i<m_scenes->size(); ++i)
     {
-        if(m_scenes.at(i)->name() == name)
+        if(m_scenes->at(i)->name() == name)
             return false;
     }
     
     if(name == "")
-        m_scenes.push_back(new Scene(QString("Scene ")+QString::number(m_scenes.size())+QString(" (Unnamed)")));
+        m_scenes->push_back(new Scene(QString("Scene ")+QString::number(m_scenes->size())+QString(" (Unnamed)")));
     else 
-        m_scenes.push_back(new Scene(name));
+        m_scenes->push_back(new Scene(name));
     
     return true;
 }
@@ -88,10 +99,46 @@ bool Demo::removeScene(QString name)
 
 int Demo::nScenes() const
 {
-    return m_scenes.size();
+    return m_scenes->size();
 }
 
 QString Demo::sceneName(int index) const
 {
-    return m_scenes.at(index)->name();
+    return m_scenes->at(index)->name();
 }
+
+static bool compareScenes(const Scene* first, const Scene* second)
+{
+    if(first->tEnd() < second->tStart()) return true;
+    return false;
+}
+
+void Demo::sortChronologically()
+{
+    std::sort(m_scenes->begin(), m_scenes->end(), compareScenes);
+}
+
+bool Demo::addScene(Scene* scene)
+{
+    if(!m_scenes->contains(scene))
+        m_scenes->push_back(scene);
+    else return false;
+    
+    sortChronologically();
+    return true;
+}
+
+bool Demo::removeScene(Scene* scene)
+{
+    if(m_scenes->contains(scene))
+        m_scenes->removeOne(scene);
+    else return false;
+    
+    return true;
+}
+
+int Demo::sceneIndex(Scene* scene)
+{
+    return m_scenes->indexOf(scene);
+}
+

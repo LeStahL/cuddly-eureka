@@ -16,13 +16,14 @@
  */
 
 #include "DemoModel.hpp"
- 
+#include "Scene.hpp"
+
 #include <QFont>
 #include <QColor>
 #include <QPushButton>
 
 DemoModel::DemoModel(Demo* demo, QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractTableModel(parent)
     , m_demo(demo)
 {
 }
@@ -48,20 +49,28 @@ QVariant DemoModel::data(const QModelIndex& index, int role) const
         if(index.column() == 0)
             return QVariant(m_demo->sceneName(index.row()));
         else if(index.column() == 1)
-            return QVariant(QString("remove"));
+            return QVariant(m_demo->sceneAt(index.row())->tStart());
         else if(index.column() == 2)
-            return QVariant(QString("up"));
+            return QVariant(m_demo->sceneAt(index.row())->tEnd());
         else if(index.column() == 3)
-            return QVariant(QString("down"));
+            return QVariant(QString("del"));
         else if(index.column() == 4)
             return QVariant(QString("SceneView"));
     }
     else if(role == Qt::BackgroundColorRole)
     {
         if(index.row() % 2 == 0)
-            return QVariant(QColor::fromRgb(255,255,0));
+        {
+            QColor color;
+            color.setNamedColor("#f3bf8f");
+            return QVariant(color);
+        }
         else
-            return QVariant(QColor::fromRgb(255,125,0));
+        {
+            QColor color;
+            color.setNamedColor("#f2a27f");
+            return QVariant(color);
+        }
     }
     else if(role == Qt::TextColorRole)
     {
@@ -86,11 +95,11 @@ QVariant DemoModel::headerData(int section, Qt::Orientation orientation, int rol
             if(section == 0)
                 return QVariant("Name");
             else if(section == 1)
-                return QVariant("X");
+                return QVariant("tlo");
             else if(section == 2)
-                return QVariant("U");
+                return QVariant("thi");
             else if(section == 3)
-                return QVariant("D");
+                return QVariant("del");
             else if(section == 4)
                 return QVariant("Connections");
         }
@@ -99,13 +108,17 @@ QVariant DemoModel::headerData(int section, Qt::Orientation orientation, int rol
             return QVariant(section);
         }
     }
-    else if(role == Qt::BackgroundRole)
+    else if(role == Qt::BackgroundColorRole)
     {
-        return QVariant(QColor::fromRgb(100,100,100));
+            QColor color;
+            color.setNamedColor("#3d253b");
+            return QVariant(color);
     }
     else if(role == Qt::TextColorRole)
     {
-        return QVariant(QColor::fromRgb(0,0,0));
+            QColor color;
+            color.setNamedColor("#f3bf8f");
+            return QVariant(color);
     }
     else if(role == Qt::FontRole)
     {
@@ -115,4 +128,39 @@ QVariant DemoModel::headerData(int section, Qt::Orientation orientation, int rol
         return QVariant(font);
     }
     return QVariant();
+}
+
+Demo * DemoModel::demo()
+{
+    return m_demo;
+}
+
+void DemoModel::beginInsertRows(const QModelIndex& m, int row, int col)
+{
+    QAbstractTableModel::beginInsertRows(m, row, col);
+}
+
+void DemoModel::beginRemoveRows(const QModelIndex& m, int row, int col)
+{
+    QAbstractTableModel::beginRemoveRows(m, row, col);
+}
+
+void DemoModel::endInsertRows()
+{
+    QAbstractTableModel::endInsertRows();
+}
+
+void DemoModel::endRemoveRows()
+{
+    QAbstractTableModel::endRemoveRows();
+}
+
+void DemoModel::update(int row, int column)
+{
+    emit dataChanged(index(row,column), index(row, column));
+}
+
+void DemoModel::updateAll()
+{
+    emit dataChanged(index(0,0), index(rowCount(), columnCount()));
 }

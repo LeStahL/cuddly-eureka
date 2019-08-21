@@ -17,21 +17,19 @@
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
+#include "model/AddSceneCommand.hpp"
 
 #include <QDebug>
 
 MainWindow::MainWindow(QApplication *app)
     : QMainWindow()
     , m_ui(new Ui::MainWindow)
-    , m_demo(new Demo)
 {
     m_ui->setupUi(this);
- 
-    //FIXME: move that to the undo stack
-    for(int i=0; i<10; ++i)
-        m_demo->addScene(QString("Scene") + QString::number(i));
-    m_demo_model = new DemoModel(m_demo);
     
+    m_demo = new Demo();
+    m_demo_model = new DemoModel(m_demo);
+
     m_ui->tableView->setModel(m_demo_model);
     m_ui->tableView->update();
 }
@@ -52,3 +50,31 @@ void MainWindow::saveDemo()
 void MainWindow::openDemo()
 {
 }
+
+void MainWindow::addScene()
+{
+    m_undo_stack.push(new AddSceneCommand(m_demo_model));
+    m_ui->actionUndo->setEnabled(true);
+}
+
+void MainWindow::removeScene()
+{
+}
+
+void MainWindow::redo()
+{
+    m_undo_stack.redo();
+    if(!m_undo_stack.canRedo())
+        m_ui->actionRedo->setEnabled(false);
+    m_ui->actionUndo->setEnabled(true);
+}
+
+void MainWindow::undo()
+{
+    m_undo_stack.undo();
+    if(!m_undo_stack.canUndo())
+        m_ui->actionUndo->setEnabled(false);
+    m_ui->actionRedo->setEnabled(true);
+}
+
+

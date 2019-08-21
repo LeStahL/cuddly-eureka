@@ -24,24 +24,31 @@
 
 class Scene;
 
+static bool compareScenes(const Scene* first, const Scene* second);
+
 class Demo
 {
 public:
     Demo();
     Demo(QVariant serial);
+    virtual ~Demo();
     QVariant serialize();
     
     bool addScene(QString name = "");
+    bool addScene(Scene *scene);
+    bool removeScene(Scene *scene);
     bool removeScene(QString name);
     bool renameScene(QString name);
     Scene *sceneAt(int index);
     Scene *sceneWithName(QString name);
     int nScenes() const;
     QString sceneName(int index) const;
+    void sortChronologically();
+    int sceneIndex(Scene *scene);
     
 private:
     QString m_demo_name;
-    QList<Scene *> m_scenes;
+    QList<Scene *> *m_scenes;
 };
 
 #endif

@@ -18,14 +18,14 @@
  #ifndef DEMOMODEL_H
  #define DEMOMODEL_H
  
-#include <QAbstractListModel>
+#include <QAbstractTableModel>
 
 #include "Demo.hpp"
 
- class DemoModel : public QAbstractListModel
+ class DemoModel : public QAbstractTableModel
  {
  public:
-     explicit DemoModel(Demo *demo, QObject *parent = 0);
+     explicit DemoModel(Demo *demo, QObject *parent = nullptr);
      ~DemoModel();
      
      // Show
@@ -33,6 +33,15 @@
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    
+    void beginInsertRows(const QModelIndex &m, int row, int col);
+    void beginRemoveRows(const QModelIndex &m, int row, int col);
+    void endInsertRows();
+    void endRemoveRows();
+    void updateAll();
+    void update(int row, int column);
+    
+    Demo *demo();
     
  private:
      Demo *m_demo;

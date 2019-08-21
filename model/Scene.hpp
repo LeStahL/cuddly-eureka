@@ -29,9 +29,15 @@ public:
     Scene(QVariant serial);
     QVariant serialize();
     QString name();
+    float tStart() const;
+    float tEnd() const;
+    void setTStart(float tstart);
+    void setTEnd(float tend);
     
 private:
     QString m_name;
+    float m_t_start,
+        m_t_end;
 };
 
 #endif
