@@ -18,8 +18,11 @@
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
 #include "model/AddSceneCommand.hpp"
+#include "model/RemoveSceneCommand.hpp"
 
 #include <QDebug>
+#include <QModelIndexList>
+#include <QItemSelectionModel>
 
 MainWindow::MainWindow(QApplication *app)
     : QMainWindow()
@@ -31,6 +34,9 @@ MainWindow::MainWindow(QApplication *app)
     m_demo_model = new DemoModel(m_demo);
 
     m_ui->tableView->setModel(m_demo_model);
+    m_ui->tableView->setStyleSheet("QHeaderView::section { background-color:#3d253b; text-color:#f3bf8f; }");
+    m_ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    
     m_ui->tableView->update();
 }
 
@@ -59,6 +65,17 @@ void MainWindow::addScene()
 
 void MainWindow::removeScene()
 {
+    // Find selected rows
+    QItemSelectionModel *select = m_ui->tableView->selectionModel();
+
+    if(!select->hasSelection()) return;
+    QModelIndexList rows = select->selectedRows();
+    for(int i=0; i<rows.size(); ++i)
+    {
+        QModelIndex index = rows.at(i);
+        m_undo_stack.push(new RemoveSceneCommand(m_demo_model, m_demo->sceneAt(index.row())));
+    }
+    m_ui->actionUndo->setEnabled(true);
 }
 
 void MainWindow::redo()

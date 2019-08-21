@@ -14,29 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+ 
+#include "RemoveSceneCommand.hpp"
 
-#ifndef ADDSCENECOMMAND_H
-#define ADDSCENECOMMAND_H
-
-#include <QUndoCommand>
-
-#include "DemoModel.hpp"
-#include "Scene.hpp"
-
-static int SCENE_COUNTER = 0;
-
-class AddSceneCommand : public QUndoCommand
+RemoveSceneCommand::RemoveSceneCommand(DemoModel* model, Scene *scene)
+    : m_model(model)
+    , m_scene(scene)
 {
-public:
-    AddSceneCommand(DemoModel *model);
-    virtual ~AddSceneCommand();
-    
-    void redo() override;
-    void undo() override;
-    
-private:
-    DemoModel *m_model;
-    Scene *m_scene;
-};
+}
 
-#endif
+RemoveSceneCommand::~RemoveSceneCommand()
+{
+}
+
+void RemoveSceneCommand::redo()
+{
+    m_model->beginRemoveRows(QModelIndex(),m_model->demo()->sceneIndex(m_scene), m_model->demo()->sceneIndex(m_scene));
+    m_model->demo()->removeScene(m_scene);
+    m_model->endRemoveRows();
+    m_model->updateAll();
+}
+
+void RemoveSceneCommand::undo()
+{
+    m_model->beginInsertRows(QModelIndex(), m_model->rowCount()-1, m_model->rowCount()-1);
+    m_model->demo()->addScene(m_scene);
+    m_model->endInsertRows();
+    m_model->updateAll();
+}

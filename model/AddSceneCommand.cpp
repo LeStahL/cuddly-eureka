@@ -22,10 +22,9 @@
 AddSceneCommand::AddSceneCommand(DemoModel* model)
     : m_model(model)
 {
-    m_id = SCENE_COUNTER;
     ++SCENE_COUNTER;
     
-    m_scene = new Scene(QString("Scene ")+QString::number(m_id));
+    m_scene = new Scene(QString("Scene ")+QString::number(SCENE_COUNTER));
 }
 
 AddSceneCommand::~AddSceneCommand()

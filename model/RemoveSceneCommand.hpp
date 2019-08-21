@@ -14,22 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef ADDSCENECOMMAND_H
-#define ADDSCENECOMMAND_H
+ 
+#ifndef REMOVESCENECOMMAND_H
+#define REMOVESCENECOMMAND_H
 
 #include <QUndoCommand>
 
 #include "DemoModel.hpp"
 #include "Scene.hpp"
 
-static int SCENE_COUNTER = 0;
-
-class AddSceneCommand : public QUndoCommand
+class RemoveSceneCommand : public QUndoCommand
 {
 public:
-    AddSceneCommand(DemoModel *model);
-    virtual ~AddSceneCommand();
+    RemoveSceneCommand(DemoModel *model, Scene *scene);
+    virtual ~RemoveSceneCommand();
     
     void redo() override;
     void undo() override;
