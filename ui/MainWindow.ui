@@ -155,6 +155,10 @@
    </property>
   </action>
   <action name="actionSave_Demo">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/icons/icons/document-save.svg</normaloff>:/icons/icons/document-save.svg</iconset>
+   </property>
    <property name="text">
     <string>Save Demo</string>
    </property>
