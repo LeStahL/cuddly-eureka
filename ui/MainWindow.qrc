@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/document-open.svg</file>
     <file>icons/document-new.svg</file>
   </qresource>
 </RCC>

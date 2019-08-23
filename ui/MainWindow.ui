@@ -143,6 +143,10 @@
    </property>
   </action>
   <action name="actionOpen_Demo">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/icons/icons/document-open.svg</normaloff>:/icons/icons/document-open.svg</iconset>
+   </property>
    <property name="text">
     <string>Open Demo</string>
    </property>
