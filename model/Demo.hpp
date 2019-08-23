@@ -30,9 +30,9 @@ class Demo
 {
 public:
     Demo();
-    Demo(QVariant serial);
     virtual ~Demo();
     QVariant serialize();
+    void deserialize(QVariant data);
     
     bool addScene(QString name = "");
     bool addScene(Scene *scene);

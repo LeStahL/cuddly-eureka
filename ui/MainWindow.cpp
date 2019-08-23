@@ -23,6 +23,9 @@
 #include <QDebug>
 #include <QModelIndexList>
 #include <QItemSelectionModel>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QApplication *app)
     : QMainWindow()
@@ -32,6 +35,7 @@ MainWindow::MainWindow(QApplication *app)
     
     m_demo = new Demo();
     m_demo_model = new DemoModel(m_demo, &m_undo_stack);
+    m_demo_model->setView(m_ui->tableView);
 
     m_ui->tableView->setModel(m_demo_model);
     m_ui->tableView->setStyleSheet("QToolbar { background:#3d253b; } QHeaderView::section { background-color:#3d253b; color:#f3bf8f; }");
@@ -47,14 +51,49 @@ MainWindow::~MainWindow()
 
 void MainWindow::newDemo()
 {
+    delete m_demo;
+    delete m_demo_model;
+    m_undo_stack.clear();
+    m_demo = new Demo();
+    m_demo_model = new DemoModel(m_demo, &m_undo_stack);
+    m_demo_model->setView(m_ui->tableView);
+    m_ui->tableView->setModel(m_demo_model);
+    m_ui->tableView->update();
 }
 
 void MainWindow::saveDemo()
 {
+    QVariant data = m_demo->serialize();
+    QJsonDocument demo_document = QJsonDocument(data.toJsonObject());
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save Demo"), "C:\\Demo", tr("JSON files (*.json)"));
+    QFile demo_file(filename);
+    demo_file.open(QFile::WriteOnly);
+    demo_file.write(demo_document.toJson());
+    demo_file.close();
 }
 
 void MainWindow::openDemo()
 {
+    QString filename = QFileDialog::getOpenFileName(this, tr("Save Demo"), "C:\\Demo", tr("JSON files (*.json)"));
+    QFile demo_file(filename);
+    demo_file.open(QFile::ReadOnly);
+    QTextStream in(&demo_file);
+    QString data = in.readAll();
+    demo_file.close();
+    QJsonDocument demo_document = QJsonDocument::fromJson(data.toUtf8());
+    
+    delete m_demo;
+    delete m_demo_model;
+    m_undo_stack.clear();
+    m_demo = new Demo();
+    
+    QVariant vdata = demo_document.object();
+    m_demo->deserialize(vdata);
+    
+    m_demo_model = new DemoModel(m_demo, &m_undo_stack);
+    m_demo_model->setView(m_ui->tableView);
+    m_ui->tableView->setModel(m_demo_model);
+    m_ui->tableView->update();
 }
 
 void MainWindow::addScene()

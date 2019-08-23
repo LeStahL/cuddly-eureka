@@ -20,6 +20,7 @@
  
 #include <QAbstractTableModel>
 #include <QUndoStack>
+#include <QTableView>
 
 #include "Demo.hpp"
 
@@ -48,9 +49,13 @@
     
     Demo *demo();
     
+    void setView(QTableView *view);
+    QTableView *view();
+    
  private:
      Demo *m_demo;
      QUndoStack *m_undo_stack;
+     QTableView *m_view;
  };
  
  #endif

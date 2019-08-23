@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
  
- #include "DemoValueChangeCommand.hpp"
+#include "DemoValueChangeCommand.hpp"
 
 DemoValueChangeCommand::DemoValueChangeCommand(const QModelIndex &index, const QVariant value, DemoModel *model)
     : QUndoCommand()

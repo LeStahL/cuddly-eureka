@@ -19,25 +19,12 @@
 #include "Scene.hpp"
 
 #include <QDebug>
+#include <QVariantMap>
 
 Demo::Demo()
     : m_scenes(new QList<Scene *>)
     , m_demo_name("unnamed-demo")
 {
-}
-
-Demo::Demo(QVariant serial)
-    : m_scenes(new QList<Scene *>)
-    , m_demo_name("unnamed-demo")
-{
-    QList<QVariant> data = serial.toList();
-    
-    m_demo_name = data.at(0).toString();
-    for(int i=0; i<data.size(); ++i)
-    {
-        QVariant scene_serial = data.at(i);
-        m_scenes->push_back(new Scene(scene_serial));
-    }
 }
 
 Demo::~Demo()
@@ -48,11 +35,12 @@ Demo::~Demo()
 
 QVariant Demo::serialize()
 {
-    QList<QVariant> data;
+    QVariantMap data;
     
-    data.push_back(QVariant(m_demo_name));
+    QVariantList list;
     for(int i=0; i<m_scenes->size(); ++i)
-        data.push_back(m_scenes->at(i)->serialize());
+        list.push_back(m_scenes->at(i)->serialize());
+    data.insert(QString("scenes"), list);
     
     return QVariant(data);
 }
@@ -140,5 +128,18 @@ bool Demo::removeScene(Scene* scene)
 int Demo::sceneIndex(Scene* scene)
 {
     return m_scenes->indexOf(scene);
+}
+
+void Demo::deserialize(QVariant data)
+{
+    QVariantMap mapdata = data.toMap();
+    
+    QVariantList list = mapdata["scenes"].toList();
+    for(int i=0; i<list.size(); ++i)
+    {
+        Scene *s = new Scene();
+        s->deserialize(list.at(i));
+        m_scenes->push_back(s);
+    }
 }
 

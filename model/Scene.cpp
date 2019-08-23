@@ -15,7 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
  
- #include "Scene.hpp"
+#include "Scene.hpp"
+
+#include <QVariantMap>
+#include <QDebug>
  
 Scene::Scene(QString name)
     : m_name(name)
@@ -26,18 +29,22 @@ Scene::Scene(QString name)
 
 QVariant Scene::serialize()
 {
-    QList<QVariant> data;
+    QVariantMap data;
     
-    data.push_back(QVariant(m_name));
+    data.insert(QString("name"), QVariant(m_name));
+    data.insert(QString("t_start"), QVariant(m_t_start));
+    data.insert(QString("t_end"), QVariant(m_t_end));
     
     return QVariant(data);
 }
 
-Scene::Scene(QVariant serial)
+void Scene::deserialize(QVariant data)
 {
-    QList<QVariant> data = serial.toList();
+    QVariantMap mapdata = data.toMap();
     
-    m_name = data.at(0).toString();
+    m_name = mapdata["name"].toString();
+    m_t_start = mapdata["t_start"].toFloat();
+    m_t_end = mapdata["m_t_end"].toFloat();
 }
 
 QString Scene::name()

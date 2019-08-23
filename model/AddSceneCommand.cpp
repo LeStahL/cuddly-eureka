@@ -25,6 +25,7 @@ AddSceneCommand::AddSceneCommand(DemoModel* model)
     ++SCENE_COUNTER;
     
     m_scene = new Scene(QString("Scene ")+QString::number(SCENE_COUNTER));
+    m_remove_button = new QPushButton("Remove");
 }
 
 AddSceneCommand::~AddSceneCommand()

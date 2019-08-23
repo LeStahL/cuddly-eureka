@@ -26,8 +26,8 @@ class Scene
 {
 public:
     Scene(QString name = "");
-    Scene(QVariant serial);
     QVariant serialize();
+    void deserialize(QVariant data);
     QString name();
     float tStart() const;
     float tEnd() const;

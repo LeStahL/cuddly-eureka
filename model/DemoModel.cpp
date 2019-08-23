@@ -181,3 +181,13 @@ bool DemoModel::setData(const QModelIndex &index, const QVariant &value, int rol
     }
     return false;
 }
+
+void DemoModel::setView(QTableView *view)
+{
+    m_view = view;
+}
+
+QTableView *DemoModel::view()
+{
+    return m_view;
+}

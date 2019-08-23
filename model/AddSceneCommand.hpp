@@ -19,6 +19,7 @@
 #define ADDSCENECOMMAND_H
 
 #include <QUndoCommand>
+#include <QPushButton>
 
 #include "DemoModel.hpp"
 #include "Scene.hpp"
@@ -37,6 +38,7 @@ public:
 private:
     DemoModel *m_model;
     Scene *m_scene;
+    QPushButton *m_remove_button;
 };
 
 #endif
