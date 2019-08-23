@@ -15,27 +15,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-#ifndef STARTTIMEVALUECHANGECOMMAND_H
-#define STARTTIMEVALUECHANGECOMMAND_H
+#ifndef DEMOVALUECHANGECOMMAND_H
+#define DEMOVALUECHANGECOMMAND_H
 
 #include <QUndoCommand>
 
 #include "DemoModel.hpp"
 #include "Scene.hpp"
 
-class StartTimeValueChangeCommand : public QUndoCommand
+class DemoValueChangeCommand : public QUndoCommand
 {
 public:
-    StartTimeValueChangeCommand(DemoModel *model, Scene *scene, float t_new);
-    virtual ~StartTimeValueChangeCommand();
+    DemoValueChangeCommand(const QModelIndex &index, QVariant value, DemoModel *model);
+    virtual ~DemoValueChangeCommand();
     
     void redo() override;
     void undo() override;
     
 private:
     DemoModel *m_model;
-    Scene *m_scene;
-    float m_t_old, m_t_new;
+    QVariant m_old, m_new;
+    int m_row, m_col;
 };
  
  #endif

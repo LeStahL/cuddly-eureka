@@ -65,3 +65,7 @@ float Scene::tStart() const
     return m_t_start;
 }
 
+void Scene::rename(QString name)
+{
+    m_name = name;
+}

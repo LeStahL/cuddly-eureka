@@ -33,6 +33,7 @@ public:
     float tEnd() const;
     void setTStart(float tstart);
     void setTEnd(float tend);
+    void rename(QString name);
     
 private:
     QString m_name;

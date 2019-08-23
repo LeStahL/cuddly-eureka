@@ -17,6 +17,7 @@
 
 #include "DemoModel.hpp"
 #include "Scene.hpp"
+#include "DemoValueChangeCommand.hpp"
 
 #include <QFont>
 #include <QColor>
@@ -175,7 +176,7 @@ bool DemoModel::setData(const QModelIndex &index, const QVariant &value, int rol
 {
     if(role == Qt::EditRole)
     {
-//         m_undo_stack.push(new TimeStartValueChanged(index, value, this));
+        m_undo_stack->push(new DemoValueChangeCommand(index, value, this));
         return true;
     }
     return false;

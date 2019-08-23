@@ -42,6 +42,7 @@ set(CUDDLY_SOURCES
     model/Scene.cpp
     model/AddSceneCommand.cpp
     model/RemoveSceneCommand.cpp
+    model/DemoValueChangeCommand.cpp
 )
 
 add_executable(cuddly-eureka ${CUDDLY_SOURCES})
