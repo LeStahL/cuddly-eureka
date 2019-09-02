@@ -45,6 +45,7 @@ private slots:
     void redo();
     void addScene();
     void removeScene();
+    void generateCode();
     
 private:
     Ui::MainWindow *m_ui;

@@ -72,6 +72,44 @@ void MainWindow::saveDemo()
     demo_file.close();
 }
 
+void MainWindow::generateCode()
+{
+    QStringList filenames;
+    QFileDialog d(this);
+    d.setFileMode(QFileDialog::DirectoryOnly);
+    d.setOption(QFileDialog::ShowDirsOnly);
+    if(d.exec())
+        filenames = d.selectedFiles();
+    QString filename = filenames.at(0);
+    
+    QFile draw_header(filename + "\\draw.h");
+    draw_header.open(QFile::WriteOnly);
+    
+    QTextStream ts(&draw_header);
+    
+    ts << "#ifndef DRAW_HEADER\n";
+    ts << "#define DRAW_HEADER\n";
+    ts << "if(scene_override)\n";
+    ts << "{\n";
+    ts << "    const int nscenes = " + QVariant(m_demo->nScenes()).toString() + ";\n";
+    ts << "    const float start_times[" + QVariant(m_demo->nScenes()).toString() + "] = {";
+    if(m_demo->nScenes() > 0)
+    {
+        for(int i=0; i<m_demo->nScenes()-1; ++i)
+            ts << QVariant(m_demo->sceneAt(i)->tStart()).toString() + ",";
+        ts << QVariant(m_demo->sceneAt(m_demo->nScenes()-1)->tStart()).toString();
+    }
+    ts << "};\n";
+    ts << "    if(override_index == 1) t = t_now;\n";
+    ts << "    else t = t_now + start_times[override_index - 2];\n";
+    ts << "}\n";
+    
+    
+    ts << "#endif\n";
+    
+    draw_header.close();
+}
+
 void MainWindow::openDemo()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Save Demo"), "C:\\Demo", tr("JSON files (*.json)"));
