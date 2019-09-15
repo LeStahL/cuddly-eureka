@@ -101,6 +101,8 @@
     <addaction name="actionRemove_Scene"/>
     <addaction name="separator"/>
     <addaction name="actionGenerate_Code"/>
+    <addaction name="separator"/>
+    <addaction name="actionSort_Scenes"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -129,6 +131,7 @@
    <addaction name="separator"/>
    <addaction name="actionAdd_Scene"/>
    <addaction name="actionRemove_Scene"/>
+   <addaction name="actionSort_Scenes"/>
   </widget>
   <action name="actionNew_Demo">
    <property name="icon">
@@ -210,6 +213,14 @@
   <action name="actionGenerate_Code">
    <property name="text">
     <string>Generate Code</string>
+   </property>
+  </action>
+  <action name="actionSort_Scenes">
+   <property name="text">
+    <string>Sort Scenes</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
  </widget>
@@ -361,6 +372,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSort_Scenes</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>sortScenes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>newDemo()</slot>
@@ -371,5 +398,6 @@
   <slot>undo()</slot>
   <slot>redo()</slot>
   <slot>generateCode()</slot>
+  <slot>sortScenes()</slot>
  </slots>
 </ui>

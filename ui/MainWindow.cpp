@@ -210,4 +210,11 @@ void MainWindow::undo()
     m_ui->actionRedo->setEnabled(true);
 }
 
+void MainWindow::sortScenes()
+{
+    qDebug() << "Sorting.";
+    m_demo->sortChronologically();
+    m_demo_model->updateAll();
+}
+
 
