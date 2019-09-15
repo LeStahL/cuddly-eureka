@@ -127,7 +127,7 @@ void MainWindow::generateCode()
     for(int i=0; i<m_demo->nScenes(); ++i)
     {
         ts << (i==0?"":"else ");
-        ts << "if(t < " << QVariant(m_demo->sceneAt(i)->tStart()).toString() + ")\n";
+        ts << "if(t < " << QVariant(m_demo->sceneAt(i)->tEnd()).toString() + ")\n";
         ts << "{\n";
         ts << "    glUseProgram(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_program);\n";
         ts << "    glUniform1f(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iTime_location, t);\n";
