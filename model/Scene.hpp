@@ -34,9 +34,12 @@ public:
     void setTStart(float tstart);
     void setTEnd(float tend);
     void rename(QString name);
+    void setPrefix(QString prefix);
+    QString prefix();
     
 private:
-    QString m_name;
+    QString m_name,
+        m_prefix;
     float m_t_start,
         m_t_end;
 };

@@ -82,6 +82,35 @@ void MainWindow::generateCode()
         filenames = d.selectedFiles();
     QString filename = filenames.at(0);
     
+    QFile scenes_header(filename + "\\scenes.h");
+    scenes_header.open(QFile::WriteOnly);
+    
+    QTextStream ts1(&scenes_header);
+    
+    ts1 << "#ifndef SCENES_HEADER\n";
+    ts1 << "#define SCENES_HEADER\n";
+
+    ts1 << "const int nscenes = " + QVariant(m_demo->nScenes()).toString() + ";\n";
+    ts1 << "const double start_times[" + QVariant(m_demo->nScenes()).toString() + "] = {";
+    if(m_demo->nScenes() > 0)
+    {
+        for(int i=0; i<m_demo->nScenes()-1; ++i)
+            ts1 << QVariant(m_demo->sceneAt(i)->tStart()).toString() + ",";
+        ts1 << QVariant(m_demo->sceneAt(m_demo->nScenes()-1)->tStart()).toString();
+    }
+    ts1 << "};\n";
+    ts1 << "const char *scene_names[" + QVariant(m_demo->nScenes()).toString() + "] = {";
+    if(m_demo->nScenes() > 0)
+    {
+        for(int i=0; i<m_demo->nScenes()-1; ++i)
+            ts1 << "\"" + QVariant(m_demo->sceneAt(i)->name()).toString() + "\",";
+        ts1 << "\"" + QVariant(m_demo->sceneAt(m_demo->nScenes()-1)->name()).toString() + "\"";
+    }
+    ts1 << "};\n";
+    
+    ts1 << "#endif\n";
+    scenes_header.close();
+    
     QFile draw_header(filename + "\\draw.h");
     draw_header.open(QFile::WriteOnly);
     
@@ -91,19 +120,28 @@ void MainWindow::generateCode()
     ts << "#define DRAW_HEADER\n";
     ts << "if(scene_override)\n";
     ts << "{\n";
-    ts << "    const int nscenes = " + QVariant(m_demo->nScenes()).toString() + ";\n";
-    ts << "    const float start_times[" + QVariant(m_demo->nScenes()).toString() + "] = {";
-    if(m_demo->nScenes() > 0)
-    {
-        for(int i=0; i<m_demo->nScenes()-1; ++i)
-            ts << QVariant(m_demo->sceneAt(i)->tStart()).toString() + ",";
-        ts << QVariant(m_demo->sceneAt(m_demo->nScenes()-1)->tStart()).toString();
-    }
-    ts << "};\n";
     ts << "    if(override_index == 1) t = t_now;\n";
     ts << "    else t = t_now + start_times[override_index - 2];\n";
-    ts << "}\n";
+    ts << "}\n\n";
     
+    for(int i=0; i<m_demo->nScenes(); ++i)
+    {
+        ts << "if(t < " << QVariant(m_demo->sceneAt(i)->tStart()).toString() + ")\n";
+        ts << "{\n";
+        ts << "    glUseProgram(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_program);\n";
+        ts << "    glUniform1f(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iTime_location, t);\n";
+        ts << "    glUniform2f(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iResolution_location, w, h);\n";
+        ts << "#ifdef MIDI\n";
+        for(int j=0; j<8; ++j)
+            ts << "    glUniform1f(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iFader" + QVariant(j).toString() + "_location, fader" + QVariant(j).toString() + ");\n";
+        ts << "    if(override_index == " + QVariant(i).toString() + ")\n";
+        ts << "    {\n";
+        ts << "        select_button(override_index);\n";
+        ts << "        override_index = " + QVariant(0).toString() + ";\n";
+        ts << "    }\n";
+        ts << "#endif\n";
+        ts << "}\n";
+    }
     
     ts << "#endif\n";
     

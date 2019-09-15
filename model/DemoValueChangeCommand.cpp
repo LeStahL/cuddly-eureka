@@ -36,6 +36,8 @@ void DemoValueChangeCommand::redo()
         m_model->demo()->sceneAt(m_row)->setTStart(m_new.toFloat());
     else if(m_col == 2)
         m_model->demo()->sceneAt(m_row)->setTEnd(m_new.toFloat());
+    else if(m_col == 3)
+        m_model->demo()->sceneAt(m_row)->setPrefix(m_new.toString());
     m_model->update(m_row, m_col);
     m_model->demo()->sortChronologically();
 }
@@ -48,6 +50,8 @@ void DemoValueChangeCommand::undo()
         m_model->demo()->sceneAt(m_row)->setTStart(m_old.toFloat());
     else if(m_col == 2)
         m_model->demo()->sceneAt(m_row)->setTEnd(m_old.toFloat());
+    else if(m_col == 3)
+        m_model->demo()->sceneAt(m_row)->setPrefix(m_old.toString());
     m_model->update(m_row, m_col);
     m_model->demo()->sortChronologically();
 }

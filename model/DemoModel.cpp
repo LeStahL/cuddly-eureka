@@ -55,7 +55,7 @@ QVariant DemoModel::data(const QModelIndex& index, int role) const
         else if(index.column() == 2)
             return QVariant(m_demo->sceneAt(index.row())->tEnd());
         else if(index.column() == 3)
-            return QVariant(QString("del"));
+            return QVariant(m_demo->sceneAt(index.row())->prefix());
         else if(index.column() == 4)
             return QVariant(QString("SceneView"));
     }
@@ -101,7 +101,7 @@ QVariant DemoModel::headerData(int section, Qt::Orientation orientation, int rol
             else if(section == 2)
                 return QVariant("thi");
             else if(section == 3)
-                return QVariant("del");
+                return QVariant("prefix");
             else if(section == 4)
                 return QVariant("Connections");
         }

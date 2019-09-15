@@ -34,6 +34,7 @@ QVariant Scene::serialize()
     data.insert(QString("name"), QVariant(m_name));
     data.insert(QString("t_start"), QVariant(m_t_start));
     data.insert(QString("t_end"), QVariant(m_t_end));
+    data.insert(QString("prefix"), QVariant(m_prefix));
     
     return QVariant(data);
 }
@@ -44,7 +45,8 @@ void Scene::deserialize(QVariant data)
     
     m_name = mapdata["name"].toString();
     m_t_start = mapdata["t_start"].toFloat();
-    m_t_end = mapdata["m_t_end"].toFloat();
+    m_t_end = mapdata["t_end"].toFloat();
+    m_prefix = mapdata["prefix"].toString();
 }
 
 QString Scene::name()
@@ -76,3 +78,15 @@ void Scene::rename(QString name)
 {
     m_name = name;
 }
+
+QString Scene::prefix()
+{
+    return m_prefix;
+}
+
+void Scene::setPrefix(QString prefix)
+{
+    m_prefix = prefix;
+}
+
+
