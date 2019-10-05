@@ -17,18 +17,15 @@
 cmake_minimum_required(VERSION 3.8)
 
 project(cuddly-eureka)
-
-if(WIN32)
-    set(CMAKE_PREFIX_PATH "C:\\Qt\\5.12.1\\msvc2017_64")
-endif()
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
 
-find_package(Qt5Widgets CONFIG REQUIRED)
-find_package(Qt5Gui CONFIG REQUIRED)
+# Tell CMake to run qt tools when necessary (For Qt5 GUIs among other things)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+# Find the right python interpreter version
+find_package(Qt5 COMPONENTS Widgets Gui)
 
 set(CUDDLY_SOURCES
     CuddlyEureka.cpp
@@ -49,7 +46,7 @@ add_executable(cuddly-eureka ${CUDDLY_SOURCES})
 target_link_libraries(cuddly-eureka Qt5::Widgets Qt5::Gui)
 
 if(WIN32)
-    find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt.exe HINTS ${CMAKE_PREFIX_PATH}\\bin)
+    find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt.exe HINTS "${CMAKE_PREFIX_PATH}/bin")
     message("Found windeployqt executable: ${WINDEPLOYQT_EXECUTABLE}")
-    add_custom_command(TARGET cuddly-eureka COMMAND ${WINDEPLOYQT_EXECUTABLE} "${PROJECT_BINARY_DIR}/Release/")
+    add_custom_command(TARGET cuddly-eureka COMMAND ${WINDEPLOYQT_EXECUTABLE} "${PROJECT_BINARY_DIR}")
 endif()
