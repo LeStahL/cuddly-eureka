@@ -88,32 +88,32 @@ void MainWindow::generateCode()
     QTextStream ts1(&scenes_header);
     
     ts1 << "#ifndef SCENES_HEADER\n";
-    ts1 << "#define SCENES_HEADER\n";
+    ts1 << "#define SCENES_HEADER\n\n";
 
     if(m_demo->nScenes() > 0)
     {
         for(int i=0; i<m_demo->nScenes(); ++i)
-            ts1 << "#define t_" << m_demo->sceneAt(i)->prefix() << " " <<  QVariant(m_demo->sceneAt(i)->tStart()).toString() << "\n";
+            ts1 << "#define t_" << m_demo->sceneAt(i)->prefix() << " (" <<  QVariant(m_demo->sceneAt(i)->tStart()).toString() << ")\n";
+        ts1 << "#define duration (" <<  QVariant(m_demo->sceneAt(m_demo->nScenes()-1)->tEnd()).toString() << ")\n\n";
     }
     
-    ts1 << "const double start_times[" + QVariant(m_demo->nScenes()).toString() + "] = {";
-    if(m_demo->nScenes() > 0)
+    ts1 << "const double start_times[] = {\n";
+    for(int i=0; i<m_demo->nScenes(); ++i)
     {
-        for(int i=0; i<m_demo->nScenes()-1; ++i)
-            ts1 << "t_" +  QVariant(m_demo->sceneAt(i)->prefix()).toString() + ",";
-        ts1 << "t_"  + QVariant(m_demo->sceneAt(m_demo->nScenes()-1)->prefix()).toString();
+        ts1 << "    t_" +  QVariant(m_demo->sceneAt(i)->prefix()).toString() + ",\n";
     }
-    ts1 << "};\n";
-    ts1 << "const char *scene_names[" + QVariant(m_demo->nScenes()).toString() + "] = {";
-    if(m_demo->nScenes() > 0)
+    ts1 << "};\n\n";
+    ts1 << "const char *scene_names[] = {\n";
+    for(int i=0; i<m_demo->nScenes(); ++i)
     {
-        for(int i=0; i<m_demo->nScenes()-1; ++i)
-            ts1 << "\"" + QVariant(m_demo->sceneAt(i)->name()).toString() + "\",";
-        ts1 << "\"" + QVariant(m_demo->sceneAt(m_demo->nScenes()-1)->name()).toString() + "\"";
+        ts1 << "    \"" + QVariant(m_demo->sceneAt(i)->name()).toString() + "\",\n";
     }
-    ts1 << "};\n";
-    ts1 << "const unsigned int nscenes = ARRAYSIZE(start_times);\n";
-    ts1 << "_STATIC_ASSERT(ARRAYSIZE(start_times) == ARRAYSIZE(scene_names));\n";
+    ts1 << "};\n\n";
+
+    ts1 << "const unsigned int nscenes = ARRAYSIZE(start_times);\n\n";
+
+    ts1 << "// We need these two arrays to always have the same size - the following line will cause a compiler error if this is ever not the case\n";
+    ts1 << "_STATIC_ASSERT(ARRAYSIZE(start_times) == ARRAYSIZE(scene_names));\n\n";
     ts1 << "#endif\n";
     scenes_header.close();
     
@@ -123,7 +123,7 @@ void MainWindow::generateCode()
     QTextStream ts(&draw_header);
     
     ts << "#ifndef DRAW_HEADER\n";
-    ts << "#define DRAW_HEADER\n";
+    ts << "#define DRAW_HEADER\n\n";
 //     ts << "if(scene_override)\n";
 //     ts << "{\n";
 //     ts << "    if(override_index == 1) t = t_now;\n";
@@ -136,12 +136,12 @@ void MainWindow::generateCode()
         if(i<m_demo->nScenes()-1)
             ts << "if(t < t_" << QVariant(m_demo->sceneAt(i+1)->prefix()).toString() + ")\n";
         ts << "{\n";
-        ts << "    glUseProgram(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_program);\n";
-        ts << "    glUniform1f(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iTime_location, t-t_" + m_demo->sceneAt(i)->prefix() + ");\n";
-        ts << "    glUniform2f(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iResolution_location, w, h);\n";
+        ts << "    glUseProgram(shader_program_gfx_" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + ".handle);\n";
+        ts << "    glUniform1f(shader_uniform_gfx_" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iTime, t-t_" + m_demo->sceneAt(i)->prefix() + ");\n";
+        ts << "    glUniform2f(shader_uniform_gfx_" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iResolution, w, h);\n";
         ts << "#ifdef MIDI\n";
         for(int j=0; j<8; ++j)
-            ts << "    glUniform1f(" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iFader" + QVariant(j).toString() + "_location, fader" + QVariant(j).toString() + ");\n";
+            ts << "    glUniform1f(shader_uniform_gfx_" + QVariant(m_demo->sceneAt(i)->prefix()).toString() + "_iFader" + QVariant(j).toString() + ", fader" + QVariant(j).toString() + ");\n";
 //         ts << "    if(override_index == " + QVariant(i).toString() + ")\n";
 //         ts << "    {\n";
 //         ts << "        select_button(override_index);\n";
