@@ -5,6 +5,7 @@
 
 # CMake
 build
+CMakeLists.txt.*
 
 # Prerequisites
 *.d
