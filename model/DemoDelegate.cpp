@@ -14,45 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QUndoStack>
+#include "DemoDelegate.hpp"
 
-#include "model/DemoModel.hpp"
-#include "model/Demo.hpp"
-
-namespace Ui
+void DemoDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    class MainWindow;
+    // Demo name
+    QStyleOption
+    
+    if(index.column() == 0) // Scene name
+    {
+    }
 }
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-    
-public:
-    MainWindow(QApplication *app);
-    virtual ~MainWindow();
-    
-private slots:
-    void openDemo();
-    void newDemo();
-    void saveDemo();
-    void undo();
-    void redo();
-    void addScene();
-    void removeScene();
-    void generateCode();
-    void sortScenes();
-    
-private:
-    Ui::MainWindow *m_ui;
-    DemoModel *m_demo_model;
-    Demo *m_demo;
-    QUndoStack m_undo_stack;
-};
-
-#endif

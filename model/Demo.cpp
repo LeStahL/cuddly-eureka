@@ -97,7 +97,8 @@ QString Demo::sceneName(int index) const
 
 static bool compareScenes(const Scene* first, const Scene* second)
 {
-    if(first->tEnd() < second->tStart()) return true;
+    if(first->tStart() < second->tStart()) return true;
+    if(first->tEnd() < second->tEnd()) return true;
     return false;
 }
 

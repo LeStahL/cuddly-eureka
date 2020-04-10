@@ -14,45 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QUndoStack>
+#ifndef STYLE_H
+#define STYLE_H
 
-#include "model/DemoModel.hpp"
-#include "model/Demo.hpp"
+#include <QProxyStyle>
+#include <QPrimitiveElemet>
+#include <QStyleOption>
+#include <QPainter>
+#include <QWidget>
 
-namespace Ui
-{
-    class MainWindow;
-}
-
-class MainWindow : public QMainWindow
+class Style : public QProxyStyle
 {
     Q_OBJECT
     
 public:
-    MainWindow(QApplication *app);
-    virtual ~MainWindow();
+    Style();
+    ~Style();
     
-private slots:
-    void openDemo();
-    void newDemo();
-    void saveDemo();
-    void undo();
-    void redo();
-    void addScene();
-    void removeScene();
-    void generateCode();
-    void sortScenes();
-    
-private:
-    Ui::MainWindow *m_ui;
-    DemoModel *m_demo_model;
-    Demo *m_demo;
-    QUndoStack m_undo_stack;
+    void drawPrimitive(QStyle::QPrimitiveElemet element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const override;
 };
 
 #endif

@@ -15,44 +15,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DEMO_DELEGATE_H
+#define DEMO_DELEGATE_H
 
-#include <QMainWindow>
-#include <QUndoStack>
+#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QStyleOptionViewItem>
+#include <QModelIndex>
 
-#include "model/DemoModel.hpp"
-#include "model/Demo.hpp"
+#include "Demo.hpp"
 
-namespace Ui
+class DemoDelegate : public QStyledItemDelegate
 {
-    class MainWindow;
-}
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-    
 public:
-    MainWindow(QApplication *app);
-    virtual ~MainWindow();
+    QStyledItemDelegate(Demo *demo);
     
-private slots:
-    void openDemo();
-    void newDemo();
-    void saveDemo();
-    void undo();
-    void redo();
-    void addScene();
-    void removeScene();
-    void generateCode();
-    void sortScenes();
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     
 private:
-    Ui::MainWindow *m_ui;
-    DemoModel *m_demo_model;
     Demo *m_demo;
-    QUndoStack m_undo_stack;
 };
 
 #endif

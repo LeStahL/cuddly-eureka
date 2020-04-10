@@ -37,7 +37,6 @@ void DemoValueChangeCommand::redo()
     else if(m_col == 2)
         m_model->demo()->sceneAt(m_row)->setTEnd(m_new.toFloat());
     m_model->update(m_row, m_col);
-    m_model->demo()->sortChronologically();
 }
 
 void DemoValueChangeCommand::undo()
@@ -49,7 +48,6 @@ void DemoValueChangeCommand::undo()
     else if(m_col == 2)
         m_model->demo()->sceneAt(m_row)->setTEnd(m_old.toFloat());
     m_model->update(m_row, m_col);
-    m_model->demo()->sortChronologically();
 }
 
 DemoValueChangeCommand::~DemoValueChangeCommand()

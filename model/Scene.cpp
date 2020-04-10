@@ -44,7 +44,7 @@ void Scene::deserialize(QVariant data)
     
     m_name = mapdata["name"].toString();
     m_t_start = mapdata["t_start"].toFloat();
-    m_t_end = mapdata["m_t_end"].toFloat();
+    m_t_end = mapdata["t_end"].toFloat();
 }
 
 QString Scene::name()

@@ -171,4 +171,10 @@ void MainWindow::undo()
     m_ui->actionRedo->setEnabled(true);
 }
 
+void MainWindow::sortScenes()
+{
+    m_demo->sortChronologically();
+    m_demo_model->updateAll();
+}
+
 

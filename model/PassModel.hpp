@@ -15,44 +15,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
-#include <QMainWindow>
+#ifndef PASSMODEL_H
+#define PASSMODEL_H
+ 
+#include <QAbstractListModel>
 #include <QUndoStack>
 
-#include "model/DemoModel.hpp"
-#include "model/Demo.hpp"
+#include "Pass.hpp"
 
-namespace Ui
+class PassModel : public QAbstractListModel
 {
-    class MainWindow;
-}
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-    
-public:
-    MainWindow(QApplication *app);
-    virtual ~MainWindow();
-    
-private slots:
-    void openDemo();
-    void newDemo();
-    void saveDemo();
-    void undo();
-    void redo();
-    void addScene();
-    void removeScene();
-    void generateCode();
-    void sortScenes();
-    
-private:
-    Ui::MainWindow *m_ui;
-    DemoModel *m_demo_model;
-    Demo *m_demo;
-    QUndoStack m_undo_stack;
 };
-
+ 
 #endif
